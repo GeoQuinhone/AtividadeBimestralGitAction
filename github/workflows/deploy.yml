@@ -1,6 +1,6 @@
-name: Deploy para VM Local
+name: Deploy para a VM Local
 
-# Evento que dispara o workflow
+# Evento que dispara o workflow para funcionamento
 on:
   push:
     branches:
