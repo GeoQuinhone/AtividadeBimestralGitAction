@@ -1,0 +1,37 @@
+name: Deploy para VM Local
+
+# Dispara quando houver push no branch main
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    # Usando self-hosted runner
+    runs-on: self-hosted
+
+    steps:
+      # 1️⃣ Checkout do código
+      - name: Fazer checkout do código
+        uses: actions/checkout@v3
+
+      # 2️⃣ Copiar arquivos para o diretório do Nginx
+      - name: Copiar arquivos para /var/www/html
+        run: |
+          sudo rsync -av --delete ./ /var/www/html/
+      
+      # 3️⃣ Ajustar permissões
+      - name: Ajustar permissões do Nginx
+        run: |
+          sudo chown -R www-data:www-data /var/www/html
+          sudo chmod -R 755 /var/www/html
+
+      # 4️⃣ Reiniciar o Nginx (opcional, mas garante que mudanças são aplicadas)
+      - name: Reiniciar Nginx
+        run: |
+          sudo systemctl reload nginx
+
+      # 5️⃣ Mensagem de sucesso
+      - name: Sucesso
+        run: echo "Deploy realizado com sucesso na VM!"
